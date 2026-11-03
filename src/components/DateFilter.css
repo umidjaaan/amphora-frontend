@@ -1,0 +1,66 @@
+.dateFilter {
+  margin: 18px 0 16px;
+}
+
+.dateFilterLabel.form-label {
+  margin-bottom: 8px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.dateFilterRow {
+  display: flex;
+  gap: 10px;
+}
+
+.dateFilterInput.form-control {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1px solid rgba(232, 232, 225, 0.25);
+  border-radius: var(--radius-field);
+  background: #1d1d1c;
+  color: var(--paper);
+  color-scheme: dark;
+}
+
+.dateFilterButton.btn {
+  padding: 11px 20px;
+  border: 0;
+  border-radius: var(--radius-field);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.dateFilterButton.btn:hover,
+.dateFilterButton.btn:focus {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.dateFilterHint.form-text {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--sand);
+}
+
+.dateFilterFound {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--paper);
+}
+
+.dateFilterReset.btn {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--yellow);
+  text-decoration: none;
+}

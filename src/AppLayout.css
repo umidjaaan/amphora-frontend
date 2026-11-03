@@ -1,0 +1,65 @@
+/* Стилистика из ЛР1: графитовый фон, бежевый текст, жёлтый акцент. */
+:root {
+  --ink: #1a1a1a;
+  --paper: #e8e8e1;
+  --sand: #b8b8a8;
+  --muted: #4c4c4c;
+  --yellow: #fecf00;
+  --shell: #111110;
+  --surround: #050505;
+  --radius-card: 20px;
+  --radius-field: 10px;
+  --tabbar-h: 74px;
+  --screen: 430px;
+  --fast: 0.2s ease;
+}
+
+body {
+  margin: 0;
+  background: var(--surround);
+  color: var(--paper);
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Колонка «телефона»: сверху прокручиваемая страница, снизу панель. */
+.appShell {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--screen);
+  height: 100vh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--shell);
+}
+
+.appContent {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.brand {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0 12px;
+  border-bottom: 1px solid rgba(232, 232, 225, 0.12);
+}
+
+@media (min-width: 620px) {
+  .appShell {
+    height: calc(100vh - 40px);
+    margin: 20px auto;
+    border-radius: 28px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  }
+}

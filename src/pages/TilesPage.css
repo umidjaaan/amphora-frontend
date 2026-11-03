@@ -1,0 +1,30 @@
+.tilesPage {
+  padding: 0 16px 24px;
+}
+
+.tilesTitle {
+  margin: 18px 0 8px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tilesLead {
+  margin: 0;
+  font-size: 14px;
+  color: var(--sand);
+}
+
+.tilesLoader {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.tilesEmpty {
+  padding: 18px;
+  border: 1px dashed rgba(232, 232, 225, 0.25);
+  border-radius: var(--radius-card);
+  font-size: 14px;
+  color: var(--sand);
+}

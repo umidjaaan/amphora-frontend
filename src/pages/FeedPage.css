@@ -1,0 +1,147 @@
+/* Лента: видео на весь экран, текст поверх, справа — лайки и «След.» */
+.feed {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+.feedLoader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.feedVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feedShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 26%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.55) 34%, rgba(0, 0, 0, 0) 62%);
+}
+
+.feedTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 0;
+}
+
+.feedCounter {
+  font-size: 13px;
+  color: rgba(232, 232, 225, 0.75);
+}
+
+.feedSource {
+  position: absolute;
+  top: 50px;
+  left: 18px;
+}
+
+.rail {
+  position: absolute;
+  right: 14px;
+  bottom: 24px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 64px;
+}
+
+.railAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.railActionNext {
+  cursor: pointer;
+  transition: color var(--fast), transform var(--fast);
+}
+
+.railActionNext:hover {
+  color: var(--yellow);
+  transform: translateY(-2px);
+}
+
+.railIcon {
+  width: 34px;
+  height: 34px;
+  fill: currentColor;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
+}
+
+.railActionNext .railIcon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.feedInfo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  padding: 26px 90px 0 18px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.72) 55%, rgba(0, 0, 0, 0) 100%);
+}
+
+.feedTitle {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.feedPeriod {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: rgba(232, 232, 225, 0.75);
+}
+
+/* описание в две строки, полностью — по кнопке «Ещё» */
+.feedDesc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42;
+  color: rgba(232, 232, 225, 0.9);
+}
+
+.feedInfoExpanded .feedDesc {
+  -webkit-line-clamp: unset;
+}
+
+.feedMore.btn {
+  padding: 4px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--yellow);
+  text-decoration: none;
+}
