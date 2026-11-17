@@ -1,0 +1,11 @@
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 17, 16, 0.55);
+  color: var(--yellow);
+  cursor: wait;
+}

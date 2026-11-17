@@ -145,3 +145,16 @@
   color: var(--yellow);
   text-decoration: none;
 }
+
+.railActionLike:not(:disabled) {
+  cursor: pointer;
+}
+
+.railActionLike:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+/* поставленный лайк — жёлтое сердце */
+.railActionLiked {
+  color: var(--yellow);
+}

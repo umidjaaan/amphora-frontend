@@ -4,7 +4,7 @@
 //
 // У категорий 13 и 14 нет фото и видео (null) — на них видно
 // изображение и видео по умолчанию.
-import type { FeedItem, ImportCategory } from "./api";
+import type { FeedItem, ImportCategory } from "./types";
 
 interface MockCategory {
   id: number;

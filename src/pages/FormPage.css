@@ -1,0 +1,94 @@
+/* Общие стили страниц с формами: «Вход» и «Добавление категории». */
+.formPage {
+  position: relative;
+  min-height: 100%;
+  padding: 0 16px 24px;
+}
+
+.formTitle {
+  margin: 18px 0 8px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.formLead {
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--sand);
+}
+
+.formStep {
+  font-size: 13px;
+  color: var(--sand);
+}
+
+.formLabel.form-label {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.formInput.form-control {
+  padding: 11px 14px;
+  border: 1px solid rgba(232, 232, 225, 0.25);
+  border-radius: var(--radius-field);
+  background: #1d1d1c;
+  color: var(--paper);
+  color-scheme: dark;
+}
+
+.formPrimary.btn {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.formPrimary.btn:hover,
+.formPrimary.btn:focus {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.formSecondary.btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.formDanger.btn {
+  color: #ff8a80;
+}
+
+.draftCard {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 10px;
+  border-radius: var(--radius-card);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.draftCard img {
+  width: 64px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.draftLabel {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.draftTitle {
+  font-weight: 700;
+}

@@ -2,21 +2,26 @@ import "./TabBar.css";
 import { FC, ReactNode } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { logoutRequest } from "../modules/auth";
+import { clearAuthToken } from "../modules/token";
+import { resetImportCategories } from "../slices/importCategoriesSlice";
+import { clearUser } from "../slices/userSlice";
 import { ROUTES, ROUTE_LABELS, RouteKey } from "../Routes";
 
 // Пункт нижней панели: адрес, иконка и доступность для гостя.
 interface TabItem {
   key: RouteKey;
   icon: ReactNode;
-  enabled: boolean;
+  guest: boolean; // доступен ли гостю
 }
 
-// В ЛР5 приложение работает для гостя: доступны только «Лента» и «Плитка».
-// «Добавление» и «Вход» видны, но неактивны (появятся в ЛР6–ЛР7).
+// Гостю доступны «Лента», «Плитка» и «Вход»; после входа открывается
+// «Добавление», а «Вход» превращается в «Выход».
 const TABS: TabItem[] = [
   {
     key: "FEED",
-    enabled: true,
+    guest: true,
     icon: (
       <svg className="tabBarIcon" viewBox="0 0 24 24" aria-hidden="true">
         <rect x="4" y="3" width="16" height="18" rx="3" />
@@ -26,7 +31,7 @@ const TABS: TabItem[] = [
   },
   {
     key: "ADD",
-    enabled: false,
+    guest: false,
     icon: (
       <svg className="tabBarIcon" viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
@@ -36,7 +41,7 @@ const TABS: TabItem[] = [
   },
   {
     key: "TILES",
-    enabled: true,
+    guest: true,
     icon: (
       <svg className="tabBarIcon" viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2" />
@@ -48,7 +53,7 @@ const TABS: TabItem[] = [
   },
   {
     key: "LOGIN",
-    enabled: false,
+    guest: true,
     icon: (
       <svg className="tabBarIcon" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="8.5" r="3.8" />
@@ -62,24 +67,48 @@ const TABS: TabItem[] = [
 export const TabBar: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
   // Активный пункт определяем по адресу: лента — /import_categories/feed/...,
   // плитка — ровно /import_categories.
   const isActive = (key: RouteKey): boolean =>
     key === "FEED" ? pathname.startsWith(ROUTES.FEED) : pathname === ROUTES[key];
 
+  // Выход: запрос деавторизации через axios, затем вручную сбрасываем Redux:
+  // пользователь становится гостем, фильтр и данные создателя очищаются.
+  const logout = async () => {
+    try {
+      await logoutRequest();
+    } catch {
+      // токен уже недействителен — всё равно выходим
+    }
+    clearAuthToken();
+    dispatch(clearUser());
+    dispatch(resetImportCategories());
+    navigate(ROUTES.TILES);
+  };
+
+  const onTab = (key: RouteKey) => {
+    if (key === "LOGIN" && isAuthenticated) {
+      void logout();
+      return;
+    }
+    navigate(ROUTES[key]);
+  };
+
   return (
     <Navbar className="tabBar">
       <Nav className="tabBarNav" activeKey={pathname}>
-        {TABS.map(({ key, icon, enabled }) => (
+        {TABS.map(({ key, icon, guest }) => (
           <Nav.Link
             key={key}
             className={`tabBarItem${isActive(key) ? " tabBarItemActive" : ""}`}
-            disabled={!enabled}
-            onClick={() => enabled && navigate(ROUTES[key])}
+            disabled={!guest && !isAuthenticated}
+            onClick={() => onTab(key)}
           >
             {icon}
-            <span>{ROUTE_LABELS[key]}</span>
+            <span>{key === "LOGIN" && isAuthenticated ? "Выход" : ROUTE_LABELS[key]}</span>
           </Nav.Link>
         ))}
       </Nav>

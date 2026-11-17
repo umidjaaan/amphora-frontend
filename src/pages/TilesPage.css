@@ -1,4 +1,6 @@
 .tilesPage {
+  position: relative;
+  min-height: 100%;
   padding: 0 16px 24px;
 }
 

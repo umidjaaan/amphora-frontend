@@ -1,6 +1,6 @@
 import "./CategoryCard.css";
 import { FC, SyntheticEvent } from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { DEFAULT_IMAGE, imageOrDefault } from "../modules/defaults";
 
 // Props карточки: данные одной услуги и обработчик нажатия.
@@ -10,6 +10,7 @@ interface CategoryCardProps {
   period: string | null;
   likes: number;
   onClick: () => void;
+  onDelete?: () => void; // есть только у своих категорий создателя
 }
 
 // Если файл по ссылке не загрузился (MinIO не запущен, файла нет) —
@@ -20,7 +21,7 @@ const setDefaultImage = (event: SyntheticEvent<HTMLImageElement>) => {
 };
 
 // CategoryCard — карточка категории импорта на странице «Плитка».
-export const CategoryCard: FC<CategoryCardProps> = ({ title, imageUrl, period, likes, onClick }) => (
+export const CategoryCard: FC<CategoryCardProps> = ({ title, imageUrl, period, likes, onClick, onDelete }) => (
   <Card className="categoryCard" onClick={onClick}>
     <div className="categoryCardMedia">
       <Card.Img
@@ -38,6 +39,19 @@ export const CategoryCard: FC<CategoryCardProps> = ({ title, imageUrl, period, l
         <span className="categoryCardLikes">&#9825; {likes}</span>
         <span className="categoryCardPeriod">{period ?? "даты не указаны"}</span>
       </div>
+      {onDelete && (
+        <Button
+          size="sm"
+          variant="outline-danger"
+          className="categoryCardDelete"
+          onClick={(event) => {
+            event.stopPropagation(); // не открывать ленту
+            onDelete();
+          }}
+        >
+          Удалить
+        </Button>
+      )}
     </Card.Body>
   </Card>
 );

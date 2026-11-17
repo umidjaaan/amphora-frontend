@@ -1,9 +1,11 @@
 import "./FeedPage.css";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Alert, Button, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { LoadingOverlay } from "../components/LoadingOverlay";
 import { SourceBadge } from "../components/SourceBadge";
-import { DataSource, FeedItem, getFeedItem } from "../modules/api";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { fetchFeedItem, likeImportCategory } from "../slices/importCategoriesSlice";
 import { DEFAULT_IMAGE, DEFAULT_VIDEO, imageOrDefault, videoOrDefault } from "../modules/defaults";
 import { ROUTES } from "../Routes";
 
@@ -23,34 +25,29 @@ const setDefaultImage = (event: SyntheticEvent<HTMLImageElement>) => {
 // описание раскрывается кнопкой «Ещё», кнопка «След.» — следующая категория.
 const FeedPage: FC = () => {
   const { id } = useParams<{ id?: string }>(); // /import_categories/feed/:id
-  const [item, setItem] = useState<FeedItem | null>(null);
-  const [source, setSource] = useState<DataSource>("mock");
+  const dispatch = useAppDispatch();
+  const { feedItem: item, feedSource: source, loading, error } = useAppSelector((state) => state.importCategories);
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
 
-  // Загрузка услуги при открытии страницы и при смене ид в адресе.
+  // Загрузка категории через thunk при открытии страницы и при смене ид в адресе.
   useEffect(() => {
-    const controller = new AbortController();
     setExpanded(false);
-    getFeedItem(id ? Number(id) : undefined, controller.signal)
-      .then(({ data, source }) => {
-        setItem(data);
-        setSource(source);
-      })
-      .catch(() => undefined);
-    return () => controller.abort();
-  }, [id]);
+    dispatch(fetchFeedItem(id ? Number(id) : undefined));
+  }, [dispatch, id, isAuthenticated]);
 
   if (!item) {
     return (
       <div className="feedLoader">
-        <Spinner animation="border" />
+        {error ? <Alert variant="danger">{error}</Alert> : <Spinner animation="border" />}
       </div>
     );
   }
 
   return (
     <div className="feed">
+      <LoadingOverlay show={loading} />
       {/* фото под видео: видно, пока видео загружается */}
       <img
         key={`img-${item.id}`}
@@ -82,15 +79,23 @@ const FeedPage: FC = () => {
       </div>
 
       <aside className="rail">
-        <div className="railAction">
+        {/* лайк ставит только авторизованный пользователь, гостю — только счётчик */}
+        <button
+          type="button"
+          className={`railAction railActionLike${item.is_liked ? " railActionLiked" : ""}`}
+          disabled={!isAuthenticated || loading}
+          title={isAuthenticated ? "Лайк" : "Войдите, чтобы поставить лайк"}
+          onClick={() => dispatch(likeImportCategory({ id: item.id, like: item.is_liked ? 0 : 1 }))}
+        >
           <svg className="railIcon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 20.5 4.2 13a4.6 4.6 0 0 1 6.5-6.5l1.3 1.3 1.3-1.3A4.6 4.6 0 0 1 19.8 13z" />
           </svg>
           <span>{item.likes}</span>
-        </div>
+        </button>
         <button
           type="button"
           className="railAction railActionNext"
+          disabled={loading}
           onClick={() => navigate(`${ROUTES.FEED}/${item.next_id}`)}
         >
           <svg className="railIcon" viewBox="0 0 24 24" aria-hidden="true">
